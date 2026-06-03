@@ -1,0 +1,12 @@
+services:
+  pokedex:
+    container_name: pokedex
+    image: ${IMAGE_NAME:-pokedex/app}:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${PORT:-0307}:${PORT:-0307}"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped

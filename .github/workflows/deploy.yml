@@ -3,8 +3,8 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main # Trigger pipeline on pushes to the main branch
-  workflow_dispatch: # Allows you to manually trigger the workflow from the Actions tab
+      - main
+  workflow_dispatch:
 
 jobs:
   build-and-push:
@@ -23,11 +23,9 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set Image Name and Tag
-        id: image_details
+      - name: Set Image Name
         run: |
-          DOCKER_IMAGE=ghcr.io/${{ github.repository_owner }}/madacoda
-          # Convert image name to lowercase
+          DOCKER_IMAGE=ghcr.io/${{ github.repository_owner }}/pokedex
           echo "IMAGE_NAME=${DOCKER_IMAGE,,}" >> $GITHUB_ENV
 
       - name: Set up Docker Buildx
@@ -46,47 +44,41 @@ jobs:
     needs: build-and-push
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Source Code
-        uses: actions/checkout@v4
-
-      - name: Rebuild Image Name
+      - name: Set Image Name
         run: |
-          DOCKER_IMAGE=ghcr.io/${{ github.repository_owner }}/madacoda
+          DOCKER_IMAGE=ghcr.io/${{ github.repository_owner }}/pokedex
           echo "IMAGE_NAME=${DOCKER_IMAGE,,}" >> $GITHUB_ENV
-
-      - name: Copy Compose File to VPS
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USERNAME }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          passphrase: ${{ secrets.VPS_SSH_PASSPHRASE }}
-          source: "docker_compose.yml"
-          target: "/app/madacoda"
 
       - name: Deploy via SSH to VPS
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.VPS_HOST }} # Ex: 198.51.100.1
-          username: ${{ secrets.VPS_USERNAME }} # Ex: root
-          key: ${{ secrets.VPS_SSH_KEY }} # Paste the raw Private Key created on the VPS
-          passphrase: ${{ secrets.VPS_SSH_PASSPHRASE }} # If your key has a passphrase, store it here
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            echo "Successfully connected to VPS!"
-
-            # Form image name again since environment vars aren't carried through SSH
-            DOCKER_IMAGE="ghcr.io/${{ github.repository_owner }}/madacoda"
+            DOCKER_IMAGE="ghcr.io/${{ github.repository_owner }}/pokedex"
             IMAGE_LOWER=$(echo "$DOCKER_IMAGE" | tr '[:upper:]' '[:lower:]')
 
-            # Authenticate VPS with GitHub Container Registry
+            mkdir -p /app/pokedex
+
+            cat > /app/pokedex/docker_compose.yml << 'EOF'
+            services:
+              pokedex:
+                container_name: pokedex
+                image: ${IMAGE_NAME}:latest
+                ports:
+                  - "0307:0307"
+                environment:
+                  - NODE_ENV=production
+                  - PORT=0307
+                restart: unless-stopped
+            EOF
+
             echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-            # Pull the newest image
             docker pull $IMAGE_LOWER:latest
 
-            # Deploy with docker compose
-            cd /app/madacoda
+            cd /app/pokedex
             IMAGE_NAME=$IMAGE_LOWER docker compose up -d
 
-            # Clean up dangling images
             docker image prune -af

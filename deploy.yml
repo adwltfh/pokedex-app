@@ -55,7 +55,7 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          passphrase: ${{ secrets.VPS_SSH_PASSPHRASE }}
+
           script: |
             DOCKER_IMAGE="ghcr.io/${{ github.repository_owner }}/pokedex"
             IMAGE_LOWER=$(echo "$DOCKER_IMAGE" | tr '[:upper:]' '[:lower:]')

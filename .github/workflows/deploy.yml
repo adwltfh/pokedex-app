@@ -59,26 +59,19 @@ jobs:
             DOCKER_IMAGE="ghcr.io/${{ github.repository_owner }}/pokedex"
             IMAGE_LOWER=$(echo "$DOCKER_IMAGE" | tr '[:upper:]' '[:lower:]')
 
-            mkdir -p /app/pokedex
-
-            cat > /app/pokedex/docker_compose.yml << 'EOF'
-            services:
-              pokedex:
-                container_name: pokedex
-                image: ${IMAGE_NAME}:latest
-                ports:
-                  - "0307:0307"
-                environment:
-                  - NODE_ENV=production
-                  - PORT=0307
-                restart: unless-stopped
-            EOF
-
             echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
             docker pull $IMAGE_LOWER:latest
 
-            cd /app/pokedex
-            IMAGE_NAME=$IMAGE_LOWER docker compose up -d
+            docker stop pokedex || true
+            docker rm pokedex || true
+
+            docker run -d \
+              --name pokedex \
+              -p 0307:0307 \
+              -e NODE_ENV=production \
+              -e PORT=0307 \
+              --restart unless-stopped \
+              $IMAGE_LOWER:latest
 
             docker image prune -af

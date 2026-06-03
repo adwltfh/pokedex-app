@@ -1,23 +1,17 @@
 import { usePokemonDetail } from "../hooks/usePokemonDetail";
 import { getTypeColor } from "../constants/typeColors";
+import { CardSkeletonItem } from "../ui/CardSkeleton";
 
 interface Props {
   name: string;
   onClick: (name: string) => void;
 }
 
-const CardSkeleton = () => (
-  <div className="rounded-2xl p-4 bg-white/5 animate-pulse h-48 flex flex-col items-center justify-center gap-3">
-    <div className="w-20 h-20 rounded-full bg-white/10" />
-    <div className="w-16 h-3 rounded-full bg-white/10" />
-    <div className="w-12 h-3 rounded-full bg-white/10" />
-  </div>
-);
 
 const PokemonCard = ({ name, onClick }: Props) => {
   const { data, isLoading } = usePokemonDetail(name);
 
-  if (isLoading) return <CardSkeleton />;
+  if (isLoading) return <CardSkeletonItem />;
   if (!data) return null;
 
   const image = data.sprites.other["official-artwork"].front_default;

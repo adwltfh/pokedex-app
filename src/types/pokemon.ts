@@ -31,6 +31,8 @@ export interface PokemonDetail {
   height: number;
   weight: number;
   base_experience: number;
+  abilities: PokemonAbility[];
+  moves: PokemonMove[];
   sprites: {
     front_default: string;
     other: {
@@ -56,13 +58,43 @@ export interface EvolutionChain {
 }
 
 export interface PokemonSpecies {
-  evolution_chain: {
-    url: string;
-  };
+  evolution_chain: { url: string };
+  base_happiness: number;
+  capture_rate: number;
   flavor_text_entries: {
     flavor_text: string;
-    language: {
-      name: string;
-    };
+    language: { name: string };
   }[];
+}
+
+export interface PokemonAbility {
+  ability: {
+    name: string;
+  };
+  is_hidden: boolean;
+  slot: number;
+}
+
+export interface PokemonMove {
+  move: {
+    name: string;
+    url: string;
+  };
+}
+
+export interface MoveDetail {
+  name: string;
+  type: {
+    name: string;
+  };
+  power: number | null;
+  accuracy: number | null;
+  pp: number;
+  damage_class: {
+    name: string;
+  };
+}
+
+export interface TypeRelations {
+  double_damage_from: { name: string }[];
 }

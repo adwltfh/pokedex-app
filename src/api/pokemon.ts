@@ -5,6 +5,8 @@ import type {
   PokemonListItem,
   PokemonSpecies,
   EvolutionChain,
+  TypeRelations,
+  MoveDetail,
 } from "../types/pokemon";
 
 const apiClient = axios.create({
@@ -59,4 +61,16 @@ export const getAllPokemon = async (): Promise<PokemonListItem[]> => {
     params: { limit: 10000, offset: 0 },
   });
   return data.results;
+};
+
+export const getMoveDetail = async (url: string): Promise<MoveDetail> => {
+  const { data } = await axios.get(url);
+  return data;
+};
+
+export const getTypeWeaknesses = async (
+  typeName: string,
+): Promise<TypeRelations> => {
+  const { data } = await apiClient.get(`/type/${typeName}`);
+  return data.damage_relations;
 };

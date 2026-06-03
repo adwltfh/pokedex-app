@@ -2,26 +2,12 @@ import { useEffect, useRef } from "react";
 import { usePokemonList } from "../hooks/usePokemonList";
 import PokemonCard from "./PokemonCard";
 import { useAllPokemon } from "../hooks/useAllPokemon";
+import CardSkeleton from "../ui/CardSkeleton";
 
 interface Props {
   onSelect: (name: string) => void;
   letter: string;
 }
-
-const SkeletonGrid = ({ count }: { count: number }) => (
-  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-    {[...Array(count)].map((_, i) => (
-      <div
-        key={i}
-        className="rounded-2xl p-4 bg-white/5 animate-pulse h-48 flex flex-col items-center justify-center gap-3"
-      >
-        <div className="w-20 h-20 rounded-full bg-white/10" />
-        <div className="w-16 h-3 rounded-full bg-white/10" />
-        <div className="w-12 h-3 rounded-full bg-white/10" />
-      </div>
-    ))}
-  </div>
-);
 
 const PokemonList = ({ onSelect, letter }: Props) => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
@@ -40,7 +26,7 @@ const PokemonList = ({ onSelect, letter }: Props) => {
   }, [hasNextPage, fetchNextPage, letter]);
 
   if (letter) {
-    if (allLoading) return <SkeletonGrid count={20} />;
+    if (allLoading) return <CardSkeleton count={20} />;
     const filtered =
       allData?.filter((p) => p.name.toUpperCase().startsWith(letter)) ?? [];
 
@@ -57,7 +43,7 @@ const PokemonList = ({ onSelect, letter }: Props) => {
     );
   }
 
-  if (isLoading) return <SkeletonGrid count={20} />;
+  if (isLoading) return <CardSkeleton count={20} />;
 
   const allPokemon = data?.pages.flatMap((page) => page.results) ?? [];
 
@@ -80,18 +66,7 @@ const PokemonList = ({ onSelect, letter }: Props) => {
       <div ref={observerRef} className="h-10 mt-4" />
 
       {isFetchingNextPage && (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mt-4">
-          {[...Array(10)].map((_, i) => (
-            <div
-              key={i}
-              className="rounded-2xl p-4 bg-white/5 animate-pulse h-48 flex flex-col items-center justify-center gap-3"
-            >
-              <div className="w-20 h-20 rounded-full bg-white/10" />
-              <div className="w-16 h-3 rounded-full bg-white/10" />
-              <div className="w-12 h-3 rounded-full bg-white/10" />
-            </div>
-          ))}
-        </div>
+        <CardSkeleton count={10} />
       )}
     </div>
   );

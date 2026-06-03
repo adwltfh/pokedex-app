@@ -1,6 +1,7 @@
 import { usePokemonByTypes } from "../hooks/usePokemonByTypes";
 import PokemonCard from "./PokemonCard";
 import type { PokemonListItem } from "../types/pokemon";
+import CardSkeleton from "../ui/CardSkeleton";
 
 interface Props {
   type: string;
@@ -12,7 +13,7 @@ const FilteredList = ({ type, onSelect, letter }: Props) => {
   const { data, isLoading } = usePokemonByTypes(type);
 
   if (isLoading)
-    return <p className="text-center text-gray-400 py-8">Loading...</p>;
+    return <CardSkeleton count={20} />;
 
   const filtered = letter
     ? data?.filter((p) => p.name.toUpperCase().startsWith(letter))

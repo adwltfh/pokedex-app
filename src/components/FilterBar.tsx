@@ -1,47 +1,68 @@
-import { usePokemonTypes } from '../hooks/usePokemonTypes'
+import { usePokemonTypes } from "../hooks/usePokemonTypes";
+import { getTypeColor } from "../constants/typeColors";
 
 interface Props {
-  selected: string
-  onSelect: (type: string) => void
+  selected: string;
+  onSelect: (type: string) => void;
 }
 
 const FilterBar = ({ selected, onSelect }: Props) => {
-  const { data, isLoading } = usePokemonTypes()
+  const { data, isLoading } = usePokemonTypes();
 
-  if (isLoading) return <div className="h-10 animate-pulse bg-gray-100 rounded-xl" />
+  if (isLoading)
+    return (
+      <div className="flex flex-col gap-2">
+        {[...Array(18)].map((_, i) => (
+          <div key={i} className="h-8 rounded-xl bg-white/10 animate-pulse" />
+        ))}
+      </div>
+    );
 
-  const types = data?.results.filter(
-    (t: { name: string }) => !['unknown', 'shadow'].includes(t.name)
-  ) ?? []
+  const types =
+    data?.results.filter(
+      (t: { name: string }) => !["unknown", "shadow"].includes(t.name),
+    ) ?? [];
 
   return (
-    <div className="flex flex-wrap gap-2 mb-6">
+    <div className="flex flex-col gap-1">
+      <div className="text-sm text-white/40 uppercase tracking-widest mb-2">
+        Type
+      </div>
+
       <button
-        onClick={() => onSelect('')}
-        className={`px-3 py-1 rounded-full text-sm capitalize transition 
-          ${selected === ''
-            ? 'bg-gray-800 text-white'
-            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+        onClick={() => onSelect("")}
+        className={`w-full text-left px-3 py-2 rounded-xl text-sm font-medium transition-all
+          ${
+            selected === ""
+              ? "bg-white text-gray-900"
+              : "text-white/70 hover:bg-white/10"
           }`}
       >
         All
       </button>
 
-      {types.map((t: { name: string }) => (
-        <button
-          key={t.name}
-          onClick={() => onSelect(t.name)}
-          className={`px-3 py-1 rounded-full text-sm capitalize transition
-            ${selected === t.name
-              ? 'bg-gray-800 text-white'
-              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }`}
-        >
-          {t.name}
-        </button>
-      ))}
-    </div>
-  )
-}
+      {types.map((t: { name: string }) => {
+        const color = getTypeColor(t.name);
+        const isSelected = selected === t.name;
 
-export default FilterBar
+        return (
+          <button
+            key={t.name}
+            onClick={() => onSelect(t.name)}
+            className={`w-full text-left px-3 py-2 rounded-xl text-sm font-medium capitalize transition-all flex items-center gap-2
+              ${isSelected ? "text-white" : "text-white/70 hover:bg-white/10"}`}
+            style={isSelected ? { backgroundColor: color } : {}}
+          >
+            <span
+              className="w-2.5 h-2.5 rounded-full shrink-0"
+              style={{ backgroundColor: color }}
+            />
+            {t.name}
+          </button>
+        );
+      })}
+    </div>
+  );
+};
+
+export default FilterBar;

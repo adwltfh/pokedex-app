@@ -42,3 +42,27 @@ export interface PokemonDetail {
   types: PokemonType[];
   stats: PokemonStat[];
 }
+
+export interface EvolutionChainLink {
+  species: {
+    name: string;
+    url: string;
+  };
+  evolves_to: EvolutionChainLink[];
+}
+
+export interface EvolutionChain {
+  chain: EvolutionChainLink;
+}
+
+export interface PokemonSpecies {
+  evolution_chain: {
+    url: string;
+  };
+  flavor_text_entries: {
+    flavor_text: string;
+    language: {
+      name: string;
+    };
+  }[];
+}

@@ -1,95 +1,115 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { usePokemonDetail } from "../hooks/usePokemonDetail";
+import { usePokemonSpecies } from "../hooks/usePokemonSpecies";
+import EvolutionChainComponent from "../components/EvolutionChain";
+import { getTypeColor } from "../constants/typeColors";
 
 const DetailPage = () => {
   const { name } = useParams<{ name: string }>();
   const navigate = useNavigate();
   const { data, isLoading, isError } = usePokemonDetail(name ?? "");
+  const { data: species } = usePokemonSpecies(name ?? "");
 
   if (isLoading)
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <p className="text-gray-400">Loading...</p>
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="w-48 h-48 rounded-full bg-white/10 animate-pulse" />
       </div>
     );
 
   if (isError || !data)
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <p className="text-red-400">Pokemon not found.</p>
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <p className="text-red-400">Pokémon not found.</p>
       </div>
     );
 
   const image = data.sprites.other["official-artwork"].front_default;
+  const primaryType = data.types[0].type.name;
+  const bgColor = getTypeColor(primaryType);
+
+  const flavorText = species?.flavor_text_entries
+    .find((e) => e.language.name === "en")
+    ?.flavor_text.replace(/\f/g, " ");
 
   return (
-    <div className="max-w-xl mx-auto px-4 py-8">
-      {/* Back Button */}
-      <button
-        onClick={() => navigate(-1)}
-        className="mb-6 text-sm text-gray-500 hover:text-gray-800 transition"
+    <div className="min-h-screen bg-gray-900 text-white">
+      <div
+        className="relative pt-12 pb-24 px-4 flex flex-col items-center"
+        style={{ backgroundColor: bgColor }}
       >
-        ← Back
-      </button>
+        <button
+          onClick={() => navigate(-1)}
+          className="absolute top-4 left-4 text-white/80 hover:text-white transition text-sm"
+        >
+          ← Back
+        </button>
 
-      <div className="bg-white rounded-2xl shadow p-6 flex flex-col items-center gap-4">
-        {/* Image */}
-        <img src={image} alt={data.name} className="w-48 h-48 object-contain" />
-
-        {/* Name + ID */}
-        <span className="text-gray-400 text-sm">
+        <span className="text-white/60 text-sm mb-1">
           #{String(data.id).padStart(3, "0")}
         </span>
-        <h1 className="text-2xl font-bold capitalize">{data.name}</h1>
+        <h1 className="text-4xl font-bold capitalize mb-4">{data.name}</h1>
 
-        {/* Types */}
-        <div className="flex gap-2">
+        <div className="flex gap-2 mb-6">
           {data.types.map((t) => (
             <span
               key={t.type.name}
-              className="bg-gray-100 rounded-full px-3 py-1 text-sm capitalize"
+              className="bg-white/20 backdrop-blur-sm text-white rounded-full px-4 py-1 text-sm capitalize"
             >
               {t.type.name}
             </span>
           ))}
         </div>
 
-        {/* Info */}
-        <div className="grid grid-cols-2 gap-4 w-full text-center mt-2">
-          <div className="bg-gray-50 rounded-xl p-3">
-            <p className="text-xs text-gray-400">Height</p>
-            <p className="font-semibold">{data.height / 10} m</p>
+        <img
+          src={image}
+          alt={data.name}
+          className="w-56 h-56 object-contain drop-shadow-2xl z-10"
+        />
+      </div>
+
+      <div className="relative bg-gray-900 rounded-t-3xl -mt-8 px-6 pt-8 pb-12 max-w-xl mx-auto">
+        {flavorText && (
+          <p className="text-gray-400 text-center text-sm italic mb-6">
+            {flavorText}
+          </p>
+        )}
+
+        <div className="grid grid-cols-3 gap-3 mb-6">
+          <div className="bg-white/5 rounded-2xl p-3 text-center">
+            <p className="text-gray-400 text-xs mb-1">Height</p>
+            <p className="font-bold">{data.height / 10} m</p>
           </div>
-          <div className="bg-gray-50 rounded-xl p-3">
-            <p className="text-xs text-gray-400">Weight</p>
-            <p className="font-semibold">{data.weight / 10} kg</p>
+          <div className="bg-white/5 rounded-2xl p-3 text-center">
+            <p className="text-gray-400 text-xs mb-1">Weight</p>
+            <p className="font-bold">{data.weight / 10} kg</p>
           </div>
-          <div className="bg-gray-50 rounded-xl p-3">
-            <p className="text-xs text-gray-400">Base XP</p>
-            <p className="font-semibold">{data.base_experience}</p>
+          <div className="bg-white/5 rounded-2xl p-3 text-center">
+            <p className="text-gray-400 text-xs mb-1">Base XP</p>
+            <p className="font-bold">{data.base_experience}</p>
           </div>
         </div>
 
-        {/* Stats */}
-        <div className="w-full mt-2">
-          <h2 className="font-semibold mb-3">Base Stats</h2>
-          {data.stats.map((s) => (
-            <div key={s.stat.name} className="mb-2">
-              <div className="flex justify-between text-sm mb-1">
-                <span className="capitalize text-gray-500">{s.stat.name}</span>
-                <span className="font-medium">{s.base_stat}</span>
-              </div>
-              <div className="w-full bg-gray-100 rounded-full h-2">
-                <div
-                  className="bg-green-400 h-2 rounded-full transition-all"
-                  style={{
-                    width: `${Math.min((s.base_stat / 255) * 100, 100)}%`,
-                  }}
-                />
-              </div>
+        <h2 className="font-bold text-lg mb-4">Base Stats</h2>
+        {data.stats.map((s) => (
+          <div key={s.stat.name} className="mb-3">
+            <div className="flex justify-between text-sm mb-1">
+              <span className="capitalize text-gray-400">{s.stat.name}</span>
+              <span className="font-medium">{s.base_stat}</span>
             </div>
-          ))}
-        </div>
+            <div className="w-full bg-white/10 rounded-full h-2">
+              <div
+                className="h-2 rounded-full transition-all duration-500"
+                style={{
+                  width: `${Math.min((s.base_stat / 255) * 100, 100)}%`,
+                  backgroundColor: bgColor,
+                }}
+              />
+            </div>
+          </div>
+        ))}
+
+        <EvolutionChainComponent pokemonName={name ?? ""} />
       </div>
     </div>
   );

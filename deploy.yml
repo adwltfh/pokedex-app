@@ -44,23 +44,10 @@ jobs:
     needs: build-and-push
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Source Code
-        uses: actions/checkout@v4
-
       - name: Set Image Name
         run: |
           DOCKER_IMAGE=ghcr.io/${{ github.repository_owner }}/pokedex
           echo "IMAGE_NAME=${DOCKER_IMAGE,,}" >> $GITHUB_ENV
-
-      - name: Copy Compose File to VPS
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USERNAME }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          passphrase: ${{ secrets.VPS_SSH_PASSPHRASE }}
-          source: "docker_compose.yml"
-          target: "/var/www/pokedex"
 
       - name: Deploy via SSH to VPS
         uses: appleboy/ssh-action@v1.0.3
@@ -72,6 +59,21 @@ jobs:
           script: |
             DOCKER_IMAGE="ghcr.io/${{ github.repository_owner }}/pokedex"
             IMAGE_LOWER=$(echo "$DOCKER_IMAGE" | tr '[:upper:]' '[:lower:]')
+
+            mkdir -p /var/www/pokedex
+
+            cat > /var/www/pokedex/docker_compose.yml << 'EOF'
+            services:
+              pokedex:
+                container_name: pokedex
+                image: ${IMAGE_NAME}:latest
+                ports:
+                  - "0307:0307"
+                environment:
+                  - NODE_ENV=production
+                  - PORT=0307
+                restart: unless-stopped
+            EOF
 
             echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 

@@ -18,6 +18,7 @@ const DetailPage = () => {
   const { data: species } = usePokemonSpecies(name ?? "");
   const [activeTab, setActiveTab] = useState<Tab>("overview");
   const [movePage, setMovePage] = useState(0);
+  const [imgError, setImgError] = useState(false);
 
   const typeNames = data?.types.map((t) => t.type.name) ?? [];
   const weaknessQueries = useQueries({
@@ -50,6 +51,11 @@ const DetailPage = () => {
     );
 
   const image = data.sprites.other["official-artwork"].front_default;
+  const imgSrc =
+    !image || imgError
+      ? "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png"
+      : image;
+
   const primaryType = data.types[0].type.name;
   const bgColor = getTypeColor(primaryType);
 
@@ -83,9 +89,10 @@ const DetailPage = () => {
         </div>
 
         <img
-          src={image}
+          src={imgSrc}
           alt={data.name}
-          className="w-60 h-60 object-contain drop-shadow-2xl z-10 hover:scale-110 transition-transform duration-300"
+          onError={() => setImgError(true)}
+          className={`w-60 h-60 object-contain drop-shadow-2xl z-10 hover:scale-110 transition-transform duration-300 ${imgError ? "opacity-30" : ""}`}
         />
       </div>
 

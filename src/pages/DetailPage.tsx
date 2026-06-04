@@ -4,7 +4,7 @@ import { usePokemonSpecies } from "../hooks/pokemon/usePokemonSpecies";
 import EvolutionChainComponent from "../components/pokemon/EvolutionChain";
 import { getTypeColor } from "../utils/typeColors";
 import Navbar from "../components/ui/Navbar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQueries } from "@tanstack/react-query";
 import { getTypeWeaknesses } from "../api/pokemon";
 
@@ -19,6 +19,10 @@ const DetailPage = () => {
   const [activeTab, setActiveTab] = useState<Tab>("overview");
   const [movePage, setMovePage] = useState(0);
   const [imgError, setImgError] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const typeNames = data?.types.map((t) => t.type.name) ?? [];
   const weaknessQueries = useQueries({

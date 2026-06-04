@@ -74,3 +74,13 @@ export const getTypeWeaknesses = async (
   const { data } = await apiClient.get(`/type/${typeName}`);
   return data.damage_relations;
 };
+
+export const getPokemonByColor = async (colorName: string): Promise<string[]> => {
+  const { data } = await apiClient.get(`/pokemon-color/${colorName}`);
+  return data.pokemon_species.map((s: { name: string }) => s.name);
+};
+
+export const getPokemonByHabitat = async (habitatName: string): Promise<string[]> => {
+  const { data } = await apiClient.get(`/pokemon-habitat/${habitatName}`);
+  return data.pokemon_species.map((s: { name: string }) => s.name);
+};

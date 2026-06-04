@@ -7,7 +7,6 @@ interface Props {
   onClick: (name: string) => void;
 }
 
-
 const PokemonCard = ({ name, onClick }: Props) => {
   const { data, isLoading } = usePokemonDetail(name);
 
@@ -21,7 +20,7 @@ const PokemonCard = ({ name, onClick }: Props) => {
   return (
     <div
       onClick={() => onClick(name)}
-      className="group rounded-2xl p-4 cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-2xl flex flex-col items-center gap-2 relative overflow-hidden w-40 h-57.5 shrink-0"
+      className="group rounded-2xl p-4 cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-2xl flex flex-col items-center gap-2 relative overflow-hidden w-full aspect-3/4"
       style={{ backgroundColor: bgColor }}
     >
       <div className="absolute -bottom-4 -right-4 w-24 h-24 opacity-10">
@@ -39,7 +38,7 @@ const PokemonCard = ({ name, onClick }: Props) => {
       <img
         src={image}
         alt={name}
-        className="w-24 h-24 object-contain drop-shadow-lg z-10 group-hover:scale-125 transition-all duration-300"
+        className="w-32 h-32 object-contain drop-shadow-lg z-10 group-hover:scale-125 transition-all duration-300"
       />
 
       <span

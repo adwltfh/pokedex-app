@@ -119,7 +119,7 @@ const DetailPage = () => {
         <div className="max-w-xl mx-auto px-6 py-6 pb-12">
           {activeTab === "overview" && (
             <div className="flex flex-col gap-6">
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {[
                   { label: "Height", value: `${data.height / 10} m` },
                   { label: "Weight", value: `${data.weight / 10} kg` },

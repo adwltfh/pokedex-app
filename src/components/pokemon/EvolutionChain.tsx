@@ -1,6 +1,6 @@
-import { useEvolutionChain } from "../hooks/useEvolutionChain";
-import { usePokemonSpecies } from "../hooks/usePokemonSpecies";
-import { parseEvolutionChain } from "../utils/parseEvolutionChain";
+import { useEvolutionChain } from "../../hooks/pokemon/useEvolutionChain";
+import { usePokemonSpecies } from "../../hooks/pokemon/usePokemonSpecies";
+import { parseEvolutionChain } from "../../utils/parseEvolutionChain";
 import { useNavigate } from "react-router-dom";
 
 interface Props {

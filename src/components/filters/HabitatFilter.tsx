@@ -1,5 +1,5 @@
-import { HABITATS } from "../constants/habitats";
-import type { HabitatFilterProps } from "../types/filters";
+import { HABITATS } from "../../constants/habitats";
+import type { HabitatFilterProps } from "../../types/filters";
 
 const HabitatFilter = ({ selected, onSelect }: HabitatFilterProps) => {
   return (

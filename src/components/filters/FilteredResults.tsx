@@ -1,12 +1,12 @@
 import { useMemo } from "react";
-import PokemonCard from "./PokemonCard";
+import PokemonCard from "../pokemon/PokemonCard";
 import CardSkeleton from "../ui/CardSkeleton";
-import { usePokemonByTypes } from "../hooks/usePokemonByTypes";
-import { usePokemonByColor } from "../hooks/usePokemonByColor";
-import { usePokemonByHabitat } from "../hooks/usePokemonByHabitat";
-import { useAllPokemon } from "../hooks/useAllPokemon";
-import type { FilteredResultsProps } from "../types/filters";
-import type { PokemonListItem } from "../types/pokemon";
+import { usePokemonByTypes } from "../../hooks/filters/usePokemonByTypes";
+import { usePokemonByColor } from "../../hooks/filters/usePokemonByColor";
+import { usePokemonByHabitat } from "../../hooks/filters/usePokemonByHabitat";
+import { useAllPokemon } from "../../hooks/pokemon/useAllPokemon";
+import type { FilteredResultsProps } from "../../types/filters";
+import type { PokemonListItem } from "../../types/pokemon";
 
 const FilteredResults = ({
   type,

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getPokemonByHabitat } from "../api/pokemon";
+import { getPokemonByHabitat } from "../../api/pokemon";
 
 export const usePokemonByHabitat = (habitatName: string) => {
   return useQuery({

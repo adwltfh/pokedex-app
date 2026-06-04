@@ -1,5 +1,5 @@
-import { HABITAT_LABELS } from "../constants/habitatLabels";
-import type { ActiveFilterChipsProps, ActiveFilters } from "../types/filters";
+import { HABITAT_LABELS } from "../../constants/habitatLabels";
+import type { ActiveFilterChipsProps, ActiveFilters } from "../../types/filters";
 
 const ActiveFilterChips = ({ filters, onClear, onClearAll }: ActiveFilterChipsProps) => {
   const active: { key: keyof ActiveFilters; label: string }[] = [];

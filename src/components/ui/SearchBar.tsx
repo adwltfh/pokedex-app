@@ -1,4 +1,4 @@
-import type { SearchBarProps } from "../types/filters";
+import type { SearchBarProps } from "../../types/filters";
 
 const SearchBar = ({
   value,

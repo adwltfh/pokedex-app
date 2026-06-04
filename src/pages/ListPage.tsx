@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import PokemonList from "../components/PokemonList";
-import FilterBar from "../components/FilterBar";
-import FilteredResults from "../components/FilteredResults";
-import AbjadFilter from "../components/AbjadFilter";
-import FilterDrawer from "../components/FilterDrawer";
-import ActiveFilterChips from "../components/ActiveFilterChips";
-import SearchBar from "../components/SearchBar";
-import ColorFilter from "../components/ColorFilter";
-import HabitatFilter from "../components/HabitatFilter";
-import Navbar from "../ui/Navbar";
+import PokemonList from "../components/pokemon/PokemonList";
+import FilterBar from "../components/filters/FilterBar";
+import FilteredResults from "../components/filters/FilteredResults";
+import AbjadFilter from "../components/filters/AbjadFilter";
+import FilterDrawer from "../components/filters/FilterDrawer";
+import ActiveFilterChips from "../components/filters/ActiveFilterChips";
+import SearchBar from "../components/ui/SearchBar";
+import ColorFilter from "../components/filters/ColorFilter";
+import HabitatFilter from "../components/filters/HabitatFilter";
+import Navbar from "../components/ui/Navbar";
 
 const ListPage = () => {
   const navigate = useNavigate();

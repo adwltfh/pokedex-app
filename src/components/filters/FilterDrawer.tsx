@@ -3,7 +3,7 @@ import FilterBar from "./FilterBar";
 import ColorFilter from "./ColorFilter";
 import HabitatFilter from "./HabitatFilter";
 import AbjadFilter from "./AbjadFilter";
-import type { FilterDrawerProps } from "../types/filters";
+import type { FilterDrawerProps } from "../../types/filters";
 
 const FilterDrawer = ({
   isOpen,

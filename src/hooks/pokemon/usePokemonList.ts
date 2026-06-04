@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { getPokemonList } from "../api/pokemon";
+import { getPokemonList } from "../../api/pokemon";
 
 const LIMIT = 20;
 

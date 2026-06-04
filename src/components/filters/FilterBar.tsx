@@ -1,6 +1,6 @@
-import { usePokemonTypes } from "../hooks/usePokemonTypes";
-import { getTypeColor } from "../constants/typeColors";
-import type { FilterBarProps } from "../types/filters";
+import { usePokemonTypes } from "../../hooks/pokemon/usePokemonTypes";
+import { getTypeColor } from "../../utils/typeColors";
+import type { FilterBarProps } from "../../types/filters";
 
 const FilterBar = ({ selected, onSelect, compact = false }: FilterBarProps) => {
   const { data, isLoading } = usePokemonTypes();

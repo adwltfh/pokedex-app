@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom";
-import { usePokemonDetail } from "../hooks/usePokemonDetail";
-import { usePokemonSpecies } from "../hooks/usePokemonSpecies";
-import EvolutionChainComponent from "../components/EvolutionChain";
-import { getTypeColor } from "../constants/typeColors";
-import Navbar from "../ui/Navbar";
+import { usePokemonDetail } from "../hooks/pokemon/usePokemonDetail";
+import { usePokemonSpecies } from "../hooks/pokemon/usePokemonSpecies";
+import EvolutionChainComponent from "../components/pokemon/EvolutionChain";
+import { getTypeColor } from "../utils/typeColors";
+import Navbar from "../components/ui/Navbar";
 import { useState } from "react";
 import { useQueries } from "@tanstack/react-query";
 import { getTypeWeaknesses } from "../api/pokemon";

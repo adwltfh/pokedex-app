@@ -1,5 +1,5 @@
-import { COLORS } from "../constants/pokemonColors";
-import type { ColorFilterProps } from "../types/filters";
+import { COLORS } from "../../constants/pokemonColors";
+import type { ColorFilterProps } from "../../types/filters";
 
 const ColorFilter = ({ selected, onSelect }: ColorFilterProps) => {
   return (

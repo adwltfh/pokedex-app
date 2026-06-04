@@ -1,5 +1,5 @@
 import { useQueries } from "@tanstack/react-query";
-import { getTypeWeaknesses } from "../api/pokemon";
+import { getTypeWeaknesses } from "../../api/pokemon";
 
 export const useTypeWeaknesses = (types: string[]) => {
   const results = useQueries({

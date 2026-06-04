@@ -1,4 +1,4 @@
-import type { AbjadFilterProps } from "../types/filters";
+import type { AbjadFilterProps } from "../../types/filters";
 
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
-import { usePokemonList } from "../hooks/usePokemonList";
+import { usePokemonList } from "../../hooks/pokemon/usePokemonList";
 import PokemonCard from "./PokemonCard";
-import { useAllPokemon } from "../hooks/useAllPokemon";
+import { useAllPokemon } from "../../hooks/pokemon/useAllPokemon";
 import CardSkeleton from "../ui/CardSkeleton";
 
 interface Props {

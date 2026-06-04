@@ -1,5 +1,5 @@
-import { usePokemonDetail } from "../hooks/usePokemonDetail";
-import { getTypeColor } from "../constants/typeColors";
+import { usePokemonDetail } from "../../hooks/pokemon/usePokemonDetail";
+import { getTypeColor } from "../../utils/typeColors";
 import { CardSkeletonItem } from "../ui/CardSkeleton";
 
 interface Props {

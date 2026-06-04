@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { usePokemonDetail } from "../../hooks/pokemon/usePokemonDetail";
 import { getTypeColor } from "../../utils/typeColors";
 import { CardSkeletonItem } from "../ui/CardSkeleton";
@@ -9,18 +10,24 @@ interface Props {
 
 const PokemonCard = ({ name, onClick }: Props) => {
   const { data, isLoading } = usePokemonDetail(name);
+  const [imgError, setImgError] = useState(false);
 
   if (isLoading) return <CardSkeletonItem />;
   if (!data) return null;
 
   const image = data.sprites.other["official-artwork"].front_default;
+  const imgSrc =
+    !image || imgError
+      ? "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png"
+      : image;
+
   const primaryType = data.types[0].type.name;
   const bgColor = getTypeColor(primaryType);
 
   return (
     <div
       onClick={() => onClick(name)}
-      className="group rounded-2xl p-4 cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-2xl flex flex-col items-center gap-2 relative overflow-hidden w-full aspect-3/4"
+      className="group rounded-2xl p-3 cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-2xl flex flex-col items-center relative overflow-hidden w-full aspect-3/4"
       style={{ backgroundColor: bgColor }}
     >
       <div className="absolute -bottom-4 -right-4 w-24 h-24 opacity-10">
@@ -35,17 +42,20 @@ const PokemonCard = ({ name, onClick }: Props) => {
         #{String(data.id).padStart(3, "0")}
       </span>
 
-      <img
-        src={image}
-        alt={name}
-        className="w-32 h-32 object-contain drop-shadow-lg z-10 group-hover:scale-125 transition-all duration-300"
-      />
+      <div className="flex flex-col items-center gap-1 my-auto">
+        <img
+          src={imgSrc}
+          alt={name}
+          onError={() => setImgError(true)}
+          className={`w-3/5 aspect-square object-contain drop-shadow-lg z-10 group-hover:scale-125 transition-all duration-300 ${imgError ? "opacity-30" : ""}`}
+        />
 
-      <span
-        className={`font-bold capitalize text-white text-center mt-1 leading-tight group-hover:scale-105 group-hover:drop-shadow-lg ${name.length > 12 ? "text-xs" : "text-sm"}`}
-      >
-        {name}
-      </span>
+        <span
+          className={`font-bold capitalize text-white text-center leading-tight transition-all duration-300 group-hover:scale-105 group-hover:drop-shadow-lg mt-6 ${name.length > 12 ? "text-xs" : "text-sm"}`}
+        >
+          {name}
+        </span>
+      </div>
 
       <div className="flex gap-1 flex-wrap justify-center mt-auto">
         {data.types.map((t) => (
